@@ -7,6 +7,7 @@ import api from "../api";
 import GroupList from "./groupList";
 import UserTable from "./usersTable";
 import _ from "lodash";
+
 const Users = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
@@ -18,6 +19,7 @@ const Users = () => {
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
+    console.log(users);
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
@@ -68,42 +70,44 @@ const Users = () => {
             setSelectedProf();
         };
         return (
-            <div className="d-flex">
-                {professions && (
-                    <div className="d-flex flex-column flex-shrink-0 p-3">
-                        <GroupList
-                            selectedItem={selectedProf}
-                            items={professions}
-                            onItemSelect={handleProfessionSelect}
-                        />
-                        <button
-                            className="btn btn-secondary mt-2"
-                            onClick={clearFilter}
-                        >
-                            Очистить
-                        </button>
-                    </div>
-                )}
-                <div className="d-flex flex-column">
-                    <SearchStatus length={count} />
-
-                    {count > 0 && (
-                        <UserTable
-                            users={usersCrop}
-                            onSort={handleSort}
-                            selectedSort={sortBy}
-                            onDelete={handleDelete}
-                            onToggleBookMark={handleToggleBookMark}
-                        />
+            <div className="d-flex flex-column">
+                <div className="d-flex">
+                    {professions && (
+                        <div className="d-flex flex-column flex-shrink-0 p-3">
+                            <GroupList
+                                selectedItem={selectedProf}
+                                items={professions}
+                                onItemSelect={handleProfessionSelect}
+                            />
+                            <button
+                                className="btn btn-secondary mt-2"
+                                onClick={clearFilter}
+                            >
+                                Очистить
+                            </button>
+                        </div>
                     )}
+                    <div className="d-flex flex-column">
+                        <SearchStatus length={count} />
 
-                    <div className="d-flex justify-content-center">
-                        <Pagination
-                            itemsCount={count}
-                            pageSize={pageSize}
-                            currentPage={currentPage}
-                            onPageChange={handlePageChange}
-                        />
+                        {count > 0 && (
+                            <UserTable
+                                users={usersCrop}
+                                onSort={handleSort}
+                                selectedSort={sortBy}
+                                onDelete={handleDelete}
+                                onToggleBookMark={handleToggleBookMark}
+                            />
+                        )}
+
+                        <div className="d-flex justify-content-center">
+                            <Pagination
+                                itemsCount={count}
+                                pageSize={pageSize}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
